@@ -22,6 +22,7 @@ public interface CursoService {
 
     // Metodos nnuevos
     Optional<Estudiante> addEstudiante(Estudiante estudiante, Long id);
+    boolean removerEstudiante(Estudiante estudiante, Long id);
 
     // Métodos adicionales para búsquedas personalizadas
     List<Curso> buscarPorCreditos(int creditos);

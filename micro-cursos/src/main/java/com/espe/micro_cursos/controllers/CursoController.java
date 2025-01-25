@@ -174,11 +174,29 @@ public class CursoController {
                     .body(Collections.singletonMap("mensaje", "No existe el usuario por el id: " + estudiante.getId() +", Error: " + e.getMessage()));
         }
 
-        if (o.isPresent()) {
+        if (!o.isEmpty()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(o.get());
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+
+    @DeleteMapping("remover-estudiante/{cursoId}")
+    public ResponseEntity<?> removerEstudiante(@RequestBody Estudiante estudiante, @PathVariable Long cursoId) {
+        boolean o;
+        try {
+            o = cursoService.removerEstudiante(estudiante, cursoId);
+        } catch (FeignException e) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body  (Collections.singletonMap("mensaje", "No existe el estudiante por el id: " + estudiante.getId() +", Error: " + e.getMessage()));
+        }
+
+        if (o) {
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(false);
     }
     
 }

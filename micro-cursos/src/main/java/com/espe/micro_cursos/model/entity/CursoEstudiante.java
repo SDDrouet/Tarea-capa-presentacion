@@ -3,16 +3,17 @@ package com.espe.micro_cursos.model.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="cursos_estudiante")
+@Table(name="cursos_estudiante",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"estudiante_id", "curso_id"}))
 public class CursoEstudiante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "estudiante_id", unique = true)
+    @Column(name = "estudiante_id", nullable = false)
     private Long estudianteId;
 
-    @Column(name = "curso_id", unique = true)
+    @Column(name = "curso_id", nullable = false)
     private Long cursoId;
 
     public Long getId() {

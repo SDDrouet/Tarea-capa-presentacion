@@ -1,0 +1,68 @@
+networks:
+  microservices-network:
+    driver: bridge
+
+services:
+  mysql-micro-curso:
+    image: mysql:latest
+    container_name: mysql-micro-curso
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: microcursos
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices-network
+
+  mysql-micro-estudiante:
+    image: mysql:latest
+    container_name: mysql-micro-estudiante
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: estudiantesCurso
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices-network
+
+  micro-curso:
+    build:
+      context: ./micro-cursos
+    container_name: micro-cursos-app
+    ports:
+      - "8003:8003"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-curso:3306/microcursos
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql-micro-curso:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  micro-estudiante:
+    build:
+      context: ./micro-estudiante
+    container_name: micro-estudiante
+    ports:
+      - "8002:8002"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-estudiante:3306/estudiantesCurso
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql-micro-estudiante:
+        condition: service_healthy
+    networks:
+      - microservices-network

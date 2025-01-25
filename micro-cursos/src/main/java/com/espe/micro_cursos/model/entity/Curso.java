@@ -30,12 +30,8 @@ public class Curso {
     @JoinColumn(name="curso_id")
     private List<CursoEstudiante> cursoEstudiantes;
 
-    @Transient
-    private List<Estudiante> estudiantes;
-
     public Curso() {
         cursoEstudiantes = new ArrayList<>();
-        estudiantes = new ArrayList<>();
     }
 
     public void addCursoEstudiante(CursoEstudiante cursoEstudiante){
@@ -52,14 +48,6 @@ public class Curso {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public List<Estudiante> getEstudiantes() {
-        return estudiantes;
-    }
-
-    public void setEstudiantes(List<Estudiante> estudiantes) {
-        this.estudiantes = estudiantes;
     }
 
     public List<CursoEstudiante> getCursoEstudiantes() {
