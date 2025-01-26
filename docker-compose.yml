@@ -66,3 +66,15 @@ services:
         condition: service_healthy
     networks:
       - microservices-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: micro-frontend
+    ports:
+      - "3000:80"
+    networks:
+      - microservices-network
+    environment:
+      - REACT_APP_BACKEND_CURSOS=http://localhost:8003
+      - REACT_APP_BACKEND_ESTUDIANTES=http://localhost:8002

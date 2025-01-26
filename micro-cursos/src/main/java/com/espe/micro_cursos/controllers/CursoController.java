@@ -13,6 +13,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/cursos")
+@CrossOrigin(origins = "http://localhost:3000") // Habilitar CORS solo para este origen
 public class CursoController {
 
     @Autowired

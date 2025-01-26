@@ -3,7 +3,8 @@ package com.espe.micro_estudiantes.model.entity;
 import jakarta.persistence.*;
 import java.util.Date;
 
-@Entity // Indica que esta clase es una entidad de base de datos
+@Entity
+@Table(name = "estudiantes")
 public class Estudiante {
 
     @Id // Marca este campo como clave primaria

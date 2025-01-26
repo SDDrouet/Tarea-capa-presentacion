@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 @Entity
-@Table(name="Cursos")
+@Table(name = "Cursos")
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,19 +26,26 @@ public class Curso {
     private Date creadoEn;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="curso_id")
+    @JoinColumn(name = "curso_id")
     private List<CursoEstudiante> cursoEstudiantes;
 
     public Curso() {
         cursoEstudiantes = new ArrayList<>();
     }
 
-    public void addCursoEstudiante(CursoEstudiante cursoEstudiante){
+    public void addCursoEstudiante(CursoEstudiante cursoEstudiante) {
         cursoEstudiantes.add(cursoEstudiante);
     }
 
-    public void removeCursoEstudiante(CursoEstudiante cursoEstudiante){
+    public void removeCursoEstudiante(CursoEstudiante cursoEstudiante) {
         cursoEstudiantes.remove(cursoEstudiante);
+    }
+
+    @PrePersist
+    protected void prePersist() {
+        if (this.creadoEn == null) {
+            this.creadoEn = new Date(); // Establece la fecha actual
+        }
     }
 
     public long getId() {

@@ -31,3 +31,23 @@ build/
 
 ### VS Code ###
 .vscode/
+### General ###
+node_modules/
+dist/
+.env
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+### Build Output ###
+/build/
+/out/
+
+### React + Vite ###
+/.eslintcache
+/yarn-error.log
+pnpm-lock.yaml
+npm-debug.log*
+.vite/
+*.local
