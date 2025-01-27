@@ -5,6 +5,7 @@ import {
   deleteCurso,
   updateCurso,
 } from "../services/api";
+import './styles.css';
 
 export default function Cursos() {
   const [cursos, setCursos] = useState([]);
@@ -69,132 +70,61 @@ export default function Cursos() {
 
   return (
     <div>
-      <h1 style={{ color: "#ffffff", textAlign: "center", marginBottom: "1rem" }}>
-        Cursos
-      </h1>
-      <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+      <h1>Cursos</h1>
+      <div className="search-container">
         <input
           type="text"
           placeholder="Buscar cursos..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            marginRight: "0.5rem",
-            border: "1px solid #5758bb",
-            borderRadius: "5px",
-          }}
         />
       </div>
-      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+      <div className="form-container">
         <input
           placeholder="Nombre"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          style={{ marginRight: "0.5rem", padding: "0.5rem" }}
         />
         <input
           placeholder="Descripción"
           value={descripcion}
           onChange={(e) => setDescripcion(e.target.value)}
-          style={{ marginRight: "0.5rem", padding: "0.5rem" }}
         />
         <input
           type="number"
           placeholder="Créditos"
           value={creditos}
           onChange={(e) => setCreditos(Number(e.target.value))}
-          style={{ marginRight: "0.5rem", padding: "0.5rem" }}
         />
-        <button
-          onClick={handleCreateOrUpdate}
-          style={{
-            backgroundColor: "#6c63ff",
-            color: "#ffffff",
-            padding: "0.5rem 1rem",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
+        <button onClick={handleCreateOrUpdate}>
           {editando ? "Actualizar Curso" : "Crear Curso"}
         </button>
         {editando && (
-          <button
-            onClick={resetForm}
-            style={{
-              marginLeft: "0.5rem",
-              backgroundColor: "#444",
-              color: "#ffffff",
-              padding: "0.5rem 1rem",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
+          <button onClick={resetForm} className="cancel">
             Cancelar
           </button>
         )}
       </div>
-      <table
-        style={{
-          width: "100%",
-          marginTop: "1rem",
-          borderCollapse: "collapse",
-          color: "#ffffff",
-        }}
-      >
+      <table>
         <thead>
-          <tr style={{ background: "#5758bb", color: "white" }}>
-            <th style={{ padding: "0.5rem", textAlign: "center" }}>Nombre</th>
-            <th style={{ padding: "0.5rem", textAlign: "center" }}>
-              Descripción
-            </th>
-            <th style={{ padding: "0.5rem", textAlign: "center" }}>Créditos</th>
-            <th style={{ padding: "0.5rem", textAlign: "center" }}>Acciones</th>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Créditos</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {cursosFiltrados.map((curso) => (
             <tr key={curso.id}>
-              <td style={{ padding: "0.5rem", borderBottom: "1px solid #ccc" }}>
-                {curso.nombre}
-              </td>
-              <td style={{ padding: "0.5rem", borderBottom: "1px solid #ccc" }}>
-                {curso.descripcion}
-              </td>
-              <td style={{ padding: "0.5rem", borderBottom: "1px solid #ccc" }}>
-                {curso.creditos}
-              </td>
-              <td
-                style={{
-                  padding: "0.5rem",
-                  borderBottom: "1px solid #ccc",
-                  textAlign: "center",
-                }}
-              >
-                <button
-                  onClick={() => handleEdit(curso)}
-                  style={{
-                    marginRight: "0.5rem",
-                    backgroundColor: "#6c63ff",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    padding: "0.3rem 0.6rem",
-                  }}
-                >
-                  Editar
-                </button>
+              <td>{curso.nombre}</td>
+              <td>{curso.descripcion}</td>
+              <td>{curso.creditos}</td>
+              <td>
+                <button onClick={() => handleEdit(curso)}>Editar</button>
                 <button
                   onClick={() => handleDelete(curso.id)}
-                  style={{
-                    backgroundColor: "red",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    padding: "0.3rem 0.6rem",
-                  }}
+                  className="delete"
                 >
                   Eliminar
                 </button>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getEstudiantes, createEstudiante, deleteEstudiante, updateEstudiante } from '../services/api';
+import './styles.css';  // Import the CSS file
 
 export default function Estudiantes() {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -79,141 +80,75 @@ export default function Estudiantes() {
 
   return (
     <div>
-      <h1 style={{ color: '#ffffff', textAlign: 'center', marginBottom: '1rem' }}>Estudiantes</h1>
-      <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+      <h1>Estudiantes</h1>
+      <div className="search-container">
         <input
           type="text"
           placeholder="Buscar estudiantes..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            marginRight: '0.5rem',
-            border: '1px solid #5758bb',
-            borderRadius: '5px',
-          }}
         />
       </div>
-      <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+      <div className="form-container">
         <input
           placeholder="Nombre"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          style={{ marginRight: '0.5rem', padding: '0.5rem' }}
         />
         <input
           placeholder="Apellido"
           value={apellido}
           onChange={(e) => setApellido(e.target.value)}
-          style={{ marginRight: '0.5rem', padding: '0.5rem' }}
         />
         <input
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ marginRight: '0.5rem', padding: '0.5rem' }}
         />
         <input
           type="date"
           placeholder="Fecha de Nacimiento"
           value={fechaNacimiento}
           onChange={(e) => setFechaNacimiento(e.target.value)}
-          style={{ marginRight: '0.5rem', padding: '0.5rem' }}
         />
         <input
           placeholder="Teléfono"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
-          style={{ marginRight: '0.5rem', padding: '0.5rem' }}
         />
-        <button
-          onClick={handleCreateOrUpdate}
-          style={{
-            backgroundColor: '#6c63ff',
-            color: '#ffffff',
-            padding: '0.5rem 1rem',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
+        <button onClick={handleCreateOrUpdate}>
           {editando ? 'Actualizar Estudiante' : 'Crear Estudiante'}
         </button>
         {editando && (
-          <button
-            onClick={resetForm}
-            style={{
-              marginLeft: '0.5rem',
-              backgroundColor: '#ff6f61',
-              color: '#ffffff',
-              padding: '0.5rem 1rem',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
+          <button className="cancel" onClick={resetForm}>
             Cancelar
           </button>
         )}
       </div>
-      <table
-        style={{
-          width: '100%',
-          marginTop: '1rem',
-          borderCollapse: 'collapse',
-          color: '#ffffff',
-        }}
-      >
+      <table>
         <thead>
-          <tr style={{ background: '#5758bb', color: 'white' }}>
-            <th style={{ padding: '0.5rem', textAlign: 'center' }}>Nombre</th>
-            <th style={{ padding: '0.5rem', textAlign: 'center' }}>Apellido</th>
-            <th style={{ padding: '0.5rem', textAlign: 'center' }}>Email</th>
-            <th style={{ padding: '0.5rem', textAlign: 'center' }}>Fecha de Nacimiento</th>
-            <th style={{ padding: '0.5rem', textAlign: 'center' }}>Teléfono</th>
-            <th style={{ padding: '0.5rem', textAlign: 'center' }}>Acciones</th>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {estudiantesFiltrados.map((e) => (
             <tr key={e.id}>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid #ccc' }}>{e.nombre}</td>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid #ccc' }}>{e.apellido}</td>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid #ccc' }}>{e.email}</td>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid #ccc' }}>{e.fechaNacimiento}</td>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid #ccc' }}>{e.telefono}</td>
-              <td
-                style={{
-                  padding: '0.5rem',
-                  borderBottom: '1px solid #ccc',
-                  textAlign: 'center',
-                }}
-              >
-                <button
-                  onClick={() => handleEdit(e)}
-                  style={{
-                    marginRight: '0.5rem',
-                    backgroundColor: '#6c63ff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    padding: '0.3rem 0.6rem',
-                    cursor: 'pointer',
-                  }}
-                >
+              <td>{e.nombre}</td>
+              <td>{e.apellido}</td>
+              <td>{e.email}</td>
+              <td>{e.fechaNacimiento}</td>
+              <td>{e.telefono}</td>
+              <td>
+                <button className="edit" onClick={() => handleEdit(e)}>
                   Editar
                 </button>
-                <button
-                  onClick={() => handleDelete(e.id)}
-                  style={{
-                    backgroundColor: 'red',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '5px',
-                    padding: '0.3rem 0.6rem',
-                    cursor: 'pointer',
-                  }}
-                >
+                <button className="delete" onClick={() => handleDelete(e.id)}>
                   Eliminar
                 </button>
               </td>

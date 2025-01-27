@@ -7,6 +7,7 @@ import {
   getCursos,
   actualizarRelacion, // Nuevo método para el PUT
 } from "../services/api";
+import './styles.css';
 
 export default function CursoEstudiante() {
   const [relaciones, setRelaciones] = useState([]);
