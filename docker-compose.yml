@@ -1,18 +1,20 @@
+version: "3.9"
+
 networks:
   microservices-network:
     driver: bridge
 
 services:
   mysql-micro-curso:
-    image: mysql:latest
+    image: mysql:${MYSQL_VERSION}
     container_name: mysql-micro-curso
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: microcursos
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE_CURSO}
     ports:
-      - "3307:3306"
+      - "${MYSQL_PORT_CURSO}:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -20,15 +22,15 @@ services:
       - microservices-network
 
   mysql-micro-estudiante:
-    image: mysql:latest
+    image: mysql:${MYSQL_VERSION}
     container_name: mysql-micro-estudiante
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: estudiantesCurso
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE_ESTUDIANTES}
     ports:
-      - "3308:3306"
+      - "${MYSQL_PORT_ESTUDIANTES}:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -38,13 +40,16 @@ services:
   micro-curso:
     build:
       context: ./micro-cursos
+      # Puedes añadir un dockerfile: si tu Dockerfile se llama distinto, e.g. Dockerfile.curso
+      # dockerfile: Dockerfile.curso
     container_name: micro-cursos-app
     ports:
-      - "8003:8003"
+      - "${PORT_MICRO_CURSO}:${PORT_MICRO_CURSO}"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-curso:3306/microcursos
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-curso:3306/${MYSQL_DATABASE_CURSO}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_PASSWORD}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # Si necesitas otras variables de entorno para el microservicio, agrégalas aquí
     depends_on:
       mysql-micro-curso:
         condition: service_healthy
@@ -56,11 +61,11 @@ services:
       context: ./micro-estudiante
     container_name: micro-estudiante
     ports:
-      - "8002:8002"
+      - "${PORT_MICRO_ESTUDIANTE}:${PORT_MICRO_ESTUDIANTE}"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-estudiante:3306/estudiantesCurso
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-estudiante:3306/${MYSQL_DATABASE_ESTUDIANTES}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_PASSWORD}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       mysql-micro-estudiante:
         condition: service_healthy
@@ -72,9 +77,10 @@ services:
       context: ./frontend
     container_name: micro-frontend
     ports:
-      - "3000:80"
+      - "${FRONTEND_PORT}:80"
     networks:
       - microservices-network
     environment:
-      - REACT_APP_BACKEND_CURSOS=http://localhost:8003
-      - REACT_APP_BACKEND_ESTUDIANTES=http://localhost:8002
+      # Estas variables se inyectarán en tiempo de build de React (si usas create-react-app)
+      - REACT_APP_BACKEND_CURSOS=${REACT_APP_BACKEND_CURSOS}
+      - REACT_APP_BACKEND_ESTUDIANTES=${REACT_APP_BACKEND_ESTUDIANTES}
