@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL_ESTUDIANTES = 'http://localhost:8002/api/estudiantes';
-const BASE_URL_CURSOS = 'http://localhost:8003/api/cursos';
-const BASE_URL_RELACION = 'http://localhost:8003/api/curso-estudiante';
+const IP_BACKEND = 'http://172.174.4.92';
+
+const BASE_URL_ESTUDIANTES = `${IP_BACKEND}:8002/api/estudiantes`;
+const BASE_URL_CURSOS = `${IP_BACKEND}:8003/api/cursos`;
+const BASE_URL_RELACION = `${IP_BACKEND}:8003/api/curso-estudiante`;
 
 export const getEstudiantes = () => axios.get(BASE_URL_ESTUDIANTES);
 export const getCursos = () => axios.get(BASE_URL_CURSOS);
@@ -18,5 +20,5 @@ export const asignarEstudianteACurso = (data) => axios.post(BASE_URL_RELACION, d
 export const obtenerRelaciones = () => axios.get(BASE_URL_RELACION);
 export const eliminarRelacion = (id) => axios.delete(`${BASE_URL_RELACION}/${id}`);
 export const actualizarRelacion = (id, data) =>
-    axios.put(`http://localhost:8003/api/curso-estudiante/${id}`, data);
+    axios.put(`${BASE_URL_RELACION}/${id}`, data);
   

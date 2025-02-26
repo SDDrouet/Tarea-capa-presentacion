@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/cursos")
-@CrossOrigin(origins = "http://localhost:3000") // Habilitar CORS solo para este origen
+@CrossOrigin(origins = "${CORS_ALLOWED_ORIGINS:*}")
 public class CursoController {
+
+    @Value("${CORS_ALLOWED_ORIGINS:*}")
+    private String allowedOrigins;
 
     @Autowired
     private CursoService cursoService;
@@ -28,8 +33,10 @@ public class CursoController {
     public ResponseEntity<Map<String, Object>> listarCursos() {
         List<Curso> cursos = cursoService.listarTodos();
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Cursos obtenidos exitosamente.");
+        response.put("message", "Cursos obtenidos exitosamente 222.");
         response.put("data", cursos);
+        response.put("origins", "${CORS_ALLOWED_ORIGINS}");
+        response.put("allowedOrigins", allowedOrigins);
         return ResponseEntity.ok(response);
     }
 

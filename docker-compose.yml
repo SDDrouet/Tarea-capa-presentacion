@@ -38,10 +38,7 @@ services:
       - microservices-network
 
   micro-curso:
-    build:
-      context: ./micro-cursos
-      # Puedes añadir un dockerfile: si tu Dockerfile se llama distinto, e.g. Dockerfile.curso
-      # dockerfile: Dockerfile.curso
+    image: davidrouet/micro-cursos:latest
     container_name: micro-cursos-app
     ports:
       - "${PORT_MICRO_CURSO}:${PORT_MICRO_CURSO}"
@@ -49,6 +46,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-curso:3306/${MYSQL_DATABASE_CURSO}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_PASSWORD}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       # Si necesitas otras variables de entorno para el microservicio, agrégalas aquí
     depends_on:
       mysql-micro-curso:
@@ -57,8 +55,7 @@ services:
       - microservices-network
 
   micro-estudiante:
-    build:
-      context: ./micro-estudiante
+    image: davidrouet/micro-estudiantes:latest
     container_name: micro-estudiante
     ports:
       - "${PORT_MICRO_ESTUDIANTE}:${PORT_MICRO_ESTUDIANTE}"
@@ -66,6 +63,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-micro-estudiante:3306/${MYSQL_DATABASE_ESTUDIANTES}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_ROOT_PASSWORD}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
     depends_on:
       mysql-micro-estudiante:
         condition: service_healthy
@@ -73,8 +71,7 @@ services:
       - microservices-network
 
   frontend:
-    build:
-      context: ./frontend
+    image: davidrouet/cursos-micro-frontend:latest
     container_name: micro-frontend
     ports:
       - "${FRONTEND_PORT}:80"
