@@ -10,21 +10,21 @@ spec:
   - host: microservices.local
     http:
       paths:
-      - path: /
+      - path: /(.*)
         pathType: Prefix
         backend:
           service:
             name: micro-frontend
             port:
               number: 80
-      - path: /api/cursos
+      - path: /api/cursos(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: micro-cursos-app
             port:
               number: 8003
-      - path: /api/estudiantes
+      - path: /api/estudiantes(/|$)(.*)
         pathType: Prefix
         backend:
           service:

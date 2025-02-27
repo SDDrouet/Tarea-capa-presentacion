@@ -48,7 +48,7 @@ metadata:
   namespace: microservices-app
 type: Opaque
 data:
-  MYSQL_ROOT_PASSWORD: cm9vdA=="
+  MYSQL_ROOT_PASSWORD: MTIzNA=="
 
 # Crear PVs y PVCs
 create_manifest "mysql-volumes.yaml" "apiVersion: v1
@@ -356,27 +356,27 @@ metadata:
   name: microservices-ingress
   namespace: microservices-app
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - host: microservices.local
     http:
       paths:
-      - path: /
+      - path: /(.*)
         pathType: Prefix
         backend:
           service:
             name: micro-frontend
             port:
               number: 80
-      - path: /api/cursos
+      - path: /api/cursos(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: micro-cursos-app
             port:
               number: 8003
-      - path: /api/estudiantes
+      - path: /api/estudiantes(/|$)(.*)
         pathType: Prefix
         backend:
           service:
@@ -447,11 +447,7 @@ kubectl get ingress -n microservices-app
 # Instrucciones finales
 echo -e "${GREEN}=== Instrucciones para acceder a la aplicación ===${NC}"
 echo -e "1. Asegúrate de añadir la siguiente entrada a tu archivo hosts:"
-if [[ ! -z "$MINIKUBE_IP" ]]; then
-    echo -e "   ${YELLOW}$MINIKUBE_IP microservices.local${NC}"
-else
-    echo -e "   ${YELLOW}127.0.0.1 microservices.local${NC}"
-fi
+echo -e "   (${YELLOW}$MINIKUBE_IP o 127.0.0.1) microservices.local${NC}"
 echo -e "2. Accede a la aplicación en tu navegador: ${YELLOW}http://microservices.local${NC}"
 echo -e "3. Para ver los logs de los servicios:"
 echo -e "   ${YELLOW}kubectl logs -f deployment/micro-curso -n microservices-app${NC}"
